@@ -142,6 +142,76 @@ en-GB:
     assert.strictEqual(readFileSync(file, 'utf8'), 'en-GB:\n  text1: ~\n  text2: ~\n');
   });
 
+  describe('--remove-orphaned', function () {
+    const orphans_yml = `en-GB:
+  # about gone_first
+  gone_first: ~
+  # --- Section ---
+
+  # about gone
+  gone: ~ # tail
+  text1: Text one
+  # translated orphan
+  done: Done
+  plural:
+    one: ~
+    other: ~
+  text2: ~
+`;
+
+    let file;
+
+    beforeEach(function () {
+      file = join(fixtures, 'orphans_en-GB.yml');
+      writeFileSync(file, orphans_yml);
+    });
+
+    it('Should keep orphaned phrases without the flag', function () {
+      run([ 'extract', '-s', join(fixtures, 'src_1.c'), '-t', file ]);
+
+      assert.strictEqual(readFileSync(file, 'utf8'), orphans_yml);
+    });
+
+    it('Should remove untranslated orphans by default, keeping section comments', function () {
+      run([ 'extract', '-s', join(fixtures, 'src_1.c'), '-t', file, '--remove-orphaned' ]);
+
+      assert.strictEqual(readFileSync(file, 'utf8'), `en-GB:
+  # --- Section ---
+
+  text1: Text one
+  # translated orphan
+  done: Done
+  text2: ~
+`);
+    });
+
+    it('Should remove all orphans with "all"', function () {
+      run([ 'extract', '-s', join(fixtures, 'src_1.c'), '-t', file, '--remove-orphaned', 'all' ]);
+
+      assert.strictEqual(readFileSync(file, 'utf8'), `en-GB:
+  # --- Section ---
+
+  text1: Text one
+  text2: ~
+`);
+    });
+
+    it('Should fail on translated orphans with --orphaned-fail, without writing', function () {
+      assert.throws(
+        () => {
+          run([ 'extract', '-s', join(fixtures, 'src_1.c'), '-t', file, '--remove-orphaned', '--orphaned-fail' ]);
+        },
+        /orphaned phrases:\s+\S+orphans_en-GB\.yml\s+done\s*$/
+      );
+
+      assert.strictEqual(readFileSync(file, 'utf8'), orphans_yml);
+    });
+
+    it('Should pass --orphaned-fail when all orphans are removed', function () {
+      run([ 'extract', '-s', join(fixtures, 'src_1.c'), '-t', file, '--remove-orphaned', 'all', '--orphaned-fail' ]);
+    });
+  });
+
   it('Should fail on singular/plural mix', function () {
     assert.throws(
       () => {

@@ -127,6 +127,19 @@ en-GB:
     other: ~
 ```
 
+Existing comments and formatting in the `yml` files are kept.
+
+Phrases in the `yml` files that are no longer used in the sources ("orphaned")
+are reported, but kept. To remove them:
+
+- `--remove-orphaned` removes only orphaned phrases that have no translation yet
+  (`~`, or plurals with all forms `~`).
+- `--remove-orphaned all` removes all orphaned phrases, including translated ones.
+  Make sure `-s` covers all your sources, or phrases still in use will be removed.
+
+Add `--orphaned-fail` to stop with an error if orphaned phrases remain (for
+example, in CI).
+
 
 ## Add the translations into the yml files
 
