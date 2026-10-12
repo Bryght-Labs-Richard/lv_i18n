@@ -132,6 +132,8 @@ describe('CLI rename', function () {
   it('Should keep key renamed to itself', function () {
     run([ 'rename', '-t', `${fixtures_yaml_path}`, '--from', 'foo', '--to', 'foo' ]);
 
+    // Also checks no files are written: saving would strip the comment
+    // in en-US.yml
     [ 'en-GB.yml', 'en-US.yml', 'ru-RU.yml' ].forEach(name => {
       assert.strictEqual(
         readFileSync(join(fixtures_tmp_dir, name), 'utf8'),
