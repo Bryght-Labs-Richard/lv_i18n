@@ -22,8 +22,8 @@ typedef enum {
 
 typedef struct {
     const char * locale_name;
-    const char * * singulars;
-    const char * * plurals[_LV_I18N_PLURAL_TYPE_NUM];
+    const char * const * singulars;
+    const char * const * plurals[_LV_I18N_PLURAL_TYPE_NUM];
     uint8_t (*locale_plural_fn)(int32_t num);
 } lv_i18n_lang_t;
 
