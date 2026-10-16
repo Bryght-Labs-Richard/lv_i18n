@@ -17,7 +17,7 @@ static const lv_i18n_lang_t * current_lang;
 static inline uint32_t op_n(int32_t val) { return (uint32_t)(val < 0 ? -val : val); }
 static inline uint32_t op_i(uint32_t val) { return val; }
 // always zero, when decimal part not exists.
-static inline uint32_t op_v(uint32_t val) { UNUSED(val); return 0; }
+static inline uint32_t op_v(uint32_t val) { UNUSED(val); return 0;}
 static inline uint32_t op_w(uint32_t val) { UNUSED(val); return 0; }
 static inline uint32_t op_f(uint32_t val) { UNUSED(val); return 0; }
 static inline uint32_t op_t(uint32_t val) { UNUSED(val); return 0; }
@@ -122,14 +122,14 @@ const lv_i18n_language_pack_t lv_i18n_language_pack[] = {
 #ifndef LV_I18N_OPTIMIZE
 
 static const char * singular_idx[] = {
-"s_en_only",
-"s_translated",
-"s_untranslated",
+    "s_en_only",
+    "s_translated",
+    "s_untranslated",
 
 };
 
 static const char * plural_idx[] = {
-"p_i_have_dogs",
+    "p_i_have_dogs",
 
 };
 
